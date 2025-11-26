@@ -56,11 +56,11 @@ ventana.title("Analizador de Texto")
 ventana.geometry("600x500")
 ventana.minsize(600, 500)
 ventana.maxsize(600, 500)
+#ventana.configure(fg_color="#082541")
 
 ventana.grid_columnconfigure(0, weight=0)  
 ventana.grid_columnconfigure(1, weight=1)  
 
-ventana.grid_rowconfigure(0, weight=0)
 ventana.grid_rowconfigure(1, weight=1)  
 ventana.grid_rowconfigure(2, weight=1) 
 
@@ -82,7 +82,7 @@ titulo = CTkLabel(
     panel_principal, 
     text="Analizador de Texto", 
     font=("Segoe UI", 22))
-titulo.grid(row=0, column=0, pady=(10, 10))
+titulo.grid(row=0, column=0, pady=(0, 10))
 
 # Resultado
 frame_resultado = CTkTextbox(
@@ -111,14 +111,24 @@ total_label = CTkLabel(
     )
 total_label.grid(row=3, column=0, sticky="nsew", pady=(0,10))
 
+# PANEL LATERAL PRINCIPAL
+panel_lateral = CTkFrame(ventana, fg_color="transparent")
+panel_lateral.grid(row=1, column=0, rowspan=2, sticky="nsew")
 
+panel_lateral.grid_rowconfigure(0, weight=1)
+panel_lateral.grid_rowconfigure(1, weight=1)
+panel_lateral.grid_columnconfigure(0, weight=1)
 
 # Panel lateral arriba (botones)
-panel_lateral_arriba = CTkFrame(ventana, fg_color="#171717")
-panel_lateral_arriba.grid(row=1, column=0, sticky="nsew", padx=(20, 10), pady=(20, 10))
+panel_lateral_arriba = CTkFrame(panel_lateral, fg_color="#1E1E1E")
+panel_lateral_arriba.grid(row=0, column=0, sticky="nsew", padx=(20, 10), pady=(20, 10))
 
-#panel_lateral_arriba.grid_propagate:(False)
-#panel_lateral_arriba.config(height=200)
+panel_lateral_arriba.grid_propagate(False)
+
+panel_lateral_arriba.grid_columnconfigure(0, weight=1)
+
+panel_lateral_arriba.grid_rowconfigure(0, weight=0)
+panel_lateral_arriba.grid_rowconfigure(1, weight=0)
 
 # Botón de seleccionar archivo
 boton_archivo = CTkButton(
@@ -132,7 +142,7 @@ boton_archivo = CTkButton(
     corner_radius=10, 
     font=("Segoe UI", 18),  
     height=35)
-boton_archivo.grid(row=0, column=0, pady=10, padx=10, sticky="ew")
+boton_archivo.grid(row=0, column=0, pady=20, padx=10, sticky="ew")
 
 # Botón de analizar texto
 boton_analizar = CTkButton(
@@ -144,15 +154,22 @@ boton_analizar = CTkButton(
     border_width=2,
     text="Analizar Archivo", 
     corner_radius=10, 
-    font=("Segoe UI", 25), 
+    font=("Segoe UI", 18), 
     height=35)
 boton_analizar.grid(row=1, column=0, pady=10, padx=10, sticky="ew")
 
 
 
 # Panel lateral bajo
-panel_lateral_abajo = CTkFrame(ventana, fg_color="#171717")
-panel_lateral_abajo.grid(row=2, column=0, sticky="nsew", padx=(20, 10), pady=(10, 20))
+panel_lateral_abajo = CTkFrame(panel_lateral, fg_color="#1E1E1E")
+panel_lateral_abajo.grid(row=1, column=0, sticky="nsew", padx=(20, 10), pady=(10, 20))
+
+panel_lateral_abajo.grid_propagate(False)
+
+panel_lateral_abajo.grid_columnconfigure(0, weight=1)
+
+panel_lateral_abajo.grid_rowconfigure(0, weight=0)
+panel_lateral_abajo.grid_rowconfigure(1, weight=0)
 
 # Boton Colores
 boton_colores = CTkButton(
@@ -166,7 +183,6 @@ boton_colores = CTkButton(
     border_width=2,
     corner_radius=10)
 boton_colores.grid(row=0, column=0, pady=10, padx=10, sticky="ew")
-
 
 
 ventana.mainloop()
