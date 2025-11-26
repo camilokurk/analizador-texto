@@ -14,7 +14,8 @@ def seleccionar_archivo():
     )
     if ruta:
         ruta_archivo = ruta
-        mostrar_ruta.configure(text=ruta_archivo)
+        mostrar_ruta.configure(text=f"Ruta: {ruta_archivo}")
+        boton_archivo.configure(fg_color="#D88313")  # Cambiar color del botón al seleccionar archivo
 
 def analizar_texto():
     if not ruta_archivo:
@@ -25,7 +26,7 @@ def analizar_texto():
     palabras = limpiar_y_dividir(texto)
     total_palabras = len(palabras)
 
-    
+     
     conteo = contar_palabras(palabras)
     top10 = top_palabras(conteo, 10)
 
@@ -34,76 +35,138 @@ def analizar_texto():
     frame_resultado.delete("1.0", END)
     frame_resultado.insert(END, resultado)
     frame_resultado.configure(state="disabled")
-    total_label.configure(text=f"Total: {total_palabras}")
+    total_label.configure(text=f"Palabras totales: {total_palabras}")
+    boton_analizar.configure(fg_color="#D88313")  # Cambiar color del botón al analizar texto
+
+def cambiar_colores():
+    if boton_analizar.cget("border_color") == "#D88313":
+        boton_analizar.configure(border_color="#D8138C", hover_color="#D8138C")
+        boton_archivo.configure(border_color="#D8138C", hover_color="#D8138C")
+        boton_colores.configure(border_color="#D8138C", hover_color="#D8138C")
+        frame_resultado.configure(border_color="#D8138C")
+    else:
+        boton_analizar.configure(border_color="#D88313", hover_color="#D88313")
+        boton_archivo.configure(border_color="#D88313", hover_color="#D88313")
+        boton_colores.configure(border_color="#D88313", hover_color="#D88313")
+        frame_resultado.configure(border_color="#D88313")
 
 # Ventana principal
 ventana = CTk()
 ventana.title("Analizador de Texto")
 ventana.geometry("600x500")
 ventana.minsize(600, 500)
+ventana.maxsize(600, 500)
+
+ventana.grid_columnconfigure(0, weight=0)  
+ventana.grid_columnconfigure(1, weight=1)  
+
+ventana.grid_rowconfigure(0, weight=0)
+ventana.grid_rowconfigure(1, weight=1)  
+ventana.grid_rowconfigure(2, weight=1) 
+
+
+
+# Panel principal (resultado)
+panel_principal = CTkFrame(ventana, fg_color="transparent")
+panel_principal.grid(row=1, column=1, sticky="nsew", padx=(10, 20), pady=20)
+
+panel_principal.grid_columnconfigure(0, weight=1)
+
+panel_principal.grid_rowconfigure(0, weight=0)
+panel_principal.grid_rowconfigure(1, weight=1)
+
+
 
 # Título
 titulo = CTkLabel(
-    ventana, 
+    panel_principal, 
     text="Analizador de Texto", 
     font=("Segoe UI", 22))
-titulo.place(relx=0.5, rely=0.1, anchor=CENTER)
+titulo.grid(row=0, column=0, pady=(10, 10))
 
 # Resultado
 frame_resultado = CTkTextbox(
-    ventana, 
+    panel_principal, 
     font=("Segoe UI", 16),
     state=DISABLED, 
-    width=500, 
-    height=200, 
+    width=300, 
+    height=250, 
     border_width=2, 
     border_color="#D88313", 
     corner_radius=10)
-frame_resultado.place(relx=0.5, rely=0.4, anchor=CENTER)
+frame_resultado.grid(row=1, column=0, pady=(0, 10))
+
+# Ruta de archivo
+mostrar_ruta = CTkLabel(
+    panel_principal, 
+    text="", 
+    font=("Segoe UI", 18))
+mostrar_ruta.grid(row=2, column=0, sticky="ew", pady=(0,10))
+
+# Total de palabras
+total_label = CTkLabel(
+    panel_principal,
+    text="",
+    font=("Segoe UI", 18)
+    )
+total_label.grid(row=3, column=0, sticky="nsew", pady=(0,10))
+
+
+
+# Panel lateral arriba (botones)
+panel_lateral_arriba = CTkFrame(ventana, fg_color="#171717")
+panel_lateral_arriba.grid(row=1, column=0, sticky="nsew", padx=(20, 10), pady=(20, 10))
+
+#panel_lateral_arriba.grid_propagate:(False)
+#panel_lateral_arriba.config(height=200)
 
 # Botón de seleccionar archivo
 boton_archivo = CTkButton(
-    ventana, 
+    panel_lateral_arriba, 
     command=seleccionar_archivo, 
     fg_color="transparent", 
     hover_color= "#D88313", 
     border_color="#D88313", 
     border_width=2,
     text="Seleccionar Archivo", 
-    corner_radius=32, 
-    font=("Segoe UI", 18), 
-    width=15, 
+    corner_radius=10, 
+    font=("Segoe UI", 18),  
     height=35)
-boton_archivo.place(relx=0.085, rely=0.7, anchor=W)
+boton_archivo.grid(row=0, column=0, pady=10, padx=10, sticky="ew")
 
 # Botón de analizar texto
 boton_analizar = CTkButton(
-    ventana, 
+    panel_lateral_arriba, 
     command=analizar_texto, 
     fg_color="transparent", 
-      hover_color= "#D88313", 
+    hover_color= "#D88313", 
     border_color="#D88313", 
     border_width=2,
     text="Analizar Archivo", 
-    corner_radius=32, 
-    font=("Segoe UI", 18), 
-    width=35, 
+    corner_radius=10, 
+    font=("Segoe UI", 25), 
     height=35)
-boton_analizar.place(relx=0.085, rely=0.8, anchor=W)
+boton_analizar.grid(row=1, column=0, pady=10, padx=10, sticky="ew")
 
-# Ruta de archivo
-mostrar_ruta = CTkLabel(
-    ventana, 
-    text="", 
-    font=("Segoe UI", 18))
-mostrar_ruta.place(relx=0.5, rely=0.9, anchor=CENTER)
 
-# Total de palabras
-total_label = CTkLabel(
-    ventana,
-    text="",
-    font=("Segoe UI", 18)
-    )
-total_label.place(relx=0.9, rely=0.65, anchor=E)
+
+# Panel lateral bajo
+panel_lateral_abajo = CTkFrame(ventana, fg_color="#171717")
+panel_lateral_abajo.grid(row=2, column=0, sticky="nsew", padx=(20, 10), pady=(10, 20))
+
+# Boton Colores
+boton_colores = CTkButton(
+    panel_lateral_abajo,
+    command=cambiar_colores,
+    text="Cambiar Colores",
+    fg_color="transparent",
+    hover_color="#D88313",
+    font=("Segoe UI", 18),
+    border_color="#D88313",
+    border_width=2,
+    corner_radius=10)
+boton_colores.grid(row=0, column=0, pady=10, padx=10, sticky="ew")
+
+
 
 ventana.mainloop()
