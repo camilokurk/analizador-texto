@@ -2,27 +2,30 @@ from customtkinter import *
 from pywinstyles import *
 from funciones import cargar_texto, contar_palabras, limpiar_y_dividir, top_palabras, stop_words
 
+import os
+
 ruta_archivo = "" # Variable global para almacenar la ruta del archivo seleccionado
+nombre_archivo = ""
 
 # FUNCIONES
 
 def seleccionar_archivo():
-    global ruta_archivo
+    global ruta_archivo, nombre_archivo
     ruta = filedialog.askopenfilename(
         title="Seleccionar archivo de texto",
         filetypes=[("Text files", "*.txt")]
     )
     if ruta:
-        ruta_archivo = ruta
-        mostrar_ruta.configure(text=f"Ruta: {ruta_archivo}")
+        nombre_archivo = os.path.basename(ruta)
+        mostrar_ruta.configure(text=f"Nombre: {nombre_archivo}")
         boton_archivo.configure(fg_color="#D88313")  # Cambiar color del botón al seleccionar archivo
 
 def analizar_texto():
-    if not ruta_archivo:
+    if not nombre_archivo:
         mostrar_ruta.configure(text="Por favor, seleccione un archivo primero.")
         return
     
-    texto = cargar_texto(ruta_archivo)
+    texto = cargar_texto(nombre_archivo)
     palabras = limpiar_y_dividir(texto)
     total_palabras = len(palabras)
 
@@ -89,27 +92,40 @@ frame_resultado = CTkTextbox(
     panel_principal, 
     font=("Segoe UI", 16),
     state=DISABLED, 
-    width=300, 
+    width=336, 
     height=250, 
     border_width=2, 
     border_color="#D88313", 
     corner_radius=10)
-frame_resultado.grid(row=1, column=0, pady=(0, 10))
+frame_resultado.grid(row=1, column=0, pady=(0, 0))
 
 # Ruta de archivo
-mostrar_ruta = CTkLabel(
+mostrar_ruta_frame = CTkFrame(
     panel_principal, 
-    text="", 
-    font=("Segoe UI", 18))
-mostrar_ruta.grid(row=2, column=0, sticky="ew", pady=(0,10))
+    fg_color="#1E1E1E", height=30)
+mostrar_ruta_frame.grid(row=2, column=0, sticky="we", pady=(0,10))
+mostrar_ruta_frame.grid_propagate(False)
+
+mostrar_ruta = CTkLabel(
+    mostrar_ruta_frame, 
+    text="Nombre:", 
+    font=("Segoe UI", 18),
+    text_color="#D88313")
+mostrar_ruta.grid(row=2, column=0, sticky="w", padx=10, pady=(0,10))
 
 # Total de palabras
+total_frame = CTkFrame(
+    panel_principal, 
+    fg_color="#1E1E1E", height=30)
+total_frame.grid(row=3, column=0, sticky="we", pady=(0,10))
+total_frame.grid_propagate(False)
+
 total_label = CTkLabel(
-    panel_principal,
-    text="",
-    font=("Segoe UI", 18)
-    )
-total_label.grid(row=3, column=0, sticky="nsew", pady=(0,10))
+    total_frame,
+    text="Palabras totales:",
+    font=("Segoe UI", 18),
+    text_color="#D88313")
+total_label.grid(row=3, column=0, sticky="w", padx=10, pady=(0,10))
 
 # PANEL LATERAL PRINCIPAL
 panel_lateral = CTkFrame(ventana, fg_color="transparent")
@@ -130,6 +146,22 @@ panel_lateral_arriba.grid_columnconfigure(0, weight=1)
 panel_lateral_arriba.grid_rowconfigure(0, weight=0)
 panel_lateral_arriba.grid_rowconfigure(1, weight=0)
 
+# Instrucciónes
+instrucciones_frame = CTkFrame(
+    panel_lateral_arriba, 
+    fg_color="#D88313",
+    corner_radius=10,
+    height=60)
+instrucciones_frame.grid(row=0, column=0, pady=(10,0), padx=10, sticky="ew")
+
+instrucciones = CTkLabel(
+    instrucciones_frame, 
+    text="Seleccione un archivo de texto (.txt)", 
+    font=("Segoe UI", 16, "italic"),
+    wraplength=165,
+    corner_radius=10)
+instrucciones.grid(row=0, column=0, pady=10)
+
 # Botón de seleccionar archivo
 boton_archivo = CTkButton(
     panel_lateral_arriba, 
@@ -141,8 +173,8 @@ boton_archivo = CTkButton(
     text="Seleccionar Archivo", 
     corner_radius=10, 
     font=("Segoe UI", 18),  
-    height=35)
-boton_archivo.grid(row=0, column=0, pady=20, padx=10, sticky="ew")
+    height=45)
+boton_archivo.grid(row=1, column=0, pady=20, padx=10, sticky="ew")
 
 # Botón de analizar texto
 boton_analizar = CTkButton(
@@ -152,11 +184,11 @@ boton_analizar = CTkButton(
     hover_color= "#D88313", 
     border_color="#D88313", 
     border_width=2,
-    text="Analizar Archivo", 
+    text="Analizar", 
     corner_radius=10, 
     font=("Segoe UI", 18), 
-    height=35)
-boton_analizar.grid(row=1, column=0, pady=10, padx=10, sticky="ew")
+    height=45)
+boton_analizar.grid(row=2, column=0, pady=(0, 10), padx=10, sticky="ew")
 
 
 
@@ -170,6 +202,8 @@ panel_lateral_abajo.grid_columnconfigure(0, weight=1)
 
 panel_lateral_abajo.grid_rowconfigure(0, weight=0)
 panel_lateral_abajo.grid_rowconfigure(1, weight=0)
+
+
 
 # Boton Colores
 boton_colores = CTkButton(
