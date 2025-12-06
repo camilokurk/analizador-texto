@@ -4,8 +4,8 @@ from funciones import cargar_texto, contar_palabras, limpiar_y_dividir, top_pala
 
 import os
 
-ruta_archivo = "" # Variable global para almacenar la ruta del archivo seleccionado
-nombre_archivo = ""
+ruta_archivo = "" # Variable global ppara la ruta del archivo
+nombre_archivo = "" # Variable global para el nombre del archivo
 
 # FUNCIONES
 
@@ -17,8 +17,8 @@ def seleccionar_archivo():
     )
     if ruta:
         nombre_archivo = os.path.basename(ruta)
-        mostrar_ruta.configure(text=f"Nombre: {nombre_archivo}")
-        boton_archivo.configure(fg_color="#D88313")  # Cambiar color del botón al seleccionar archivo
+        mostrar_ruta.configure(text=f"Archivo: {nombre_archivo}")
+        #boton_archivo.configure(fg_color="#D88313")
 
 def analizar_texto():
     if not nombre_archivo:
@@ -39,7 +39,7 @@ def analizar_texto():
     frame_resultado.insert(END, resultado)
     frame_resultado.configure(state="disabled")
     total_label.configure(text=f"Palabras totales: {total_palabras}")
-    boton_analizar.configure(fg_color="#D88313")  # Cambiar color del botón al analizar texto
+    #boton_analizar.configure(fg_color="#D88313")
 
 def cambiar_colores():
     if boton_analizar.cget("border_color") == "#D88313":
@@ -59,7 +59,6 @@ ventana.title("Analizador de Texto")
 ventana.geometry("600x500")
 ventana.minsize(600, 500)
 ventana.maxsize(600, 500)
-#ventana.configure(fg_color="#082541")
 
 ventana.grid_columnconfigure(0, weight=0)  
 ventana.grid_columnconfigure(1, weight=1)  
@@ -108,7 +107,7 @@ mostrar_ruta_frame.grid_propagate(False)
 
 mostrar_ruta = CTkLabel(
     mostrar_ruta_frame, 
-    text="Nombre:", 
+    text="Archivo:", 
     font=("Segoe UI", 18),
     text_color="#D88313")
 mostrar_ruta.grid(row=2, column=0, sticky="w", padx=10, pady=(0,10))
@@ -149,7 +148,7 @@ panel_lateral_arriba.grid_rowconfigure(1, weight=0)
 # Instrucciónes
 instrucciones_frame = CTkFrame(
     panel_lateral_arriba, 
-    fg_color="#D88313",
+    fg_color="transparent",
     corner_radius=10,
     height=60)
 instrucciones_frame.grid(row=0, column=0, pady=(10,0), padx=10, sticky="ew")
@@ -209,14 +208,16 @@ panel_lateral_abajo.grid_rowconfigure(1, weight=0)
 boton_colores = CTkButton(
     panel_lateral_abajo,
     command=cambiar_colores,
-    text="Cambiar Colores",
-    fg_color="transparent",
-    hover_color="#D88313",
+    text="",
     font=("Segoe UI", 18),
-    border_color="#D88313",
+    fg_color="#D8138C",
+    hover_color="#D8138C",
+    border_color="#D8138C",
     border_width=2,
-    corner_radius=10)
-boton_colores.grid(row=0, column=0, pady=10, padx=10, sticky="ew")
+    corner_radius=10,
+    width=45,
+    height=45,)
+boton_colores.grid(row=0, column=0, pady=10, padx=10, sticky="w")
 
 
 ventana.mainloop()
